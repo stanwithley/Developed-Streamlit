@@ -15,31 +15,31 @@ if page == "Csv Uploader":
     def load_csv(file):
         return pd.read_csv(file)
 
-    uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+    uploaded = st.file_uploader("Upload a CSV file", type=["csv"])
 
-    if uploaded_file is not None:
-        df = load_csv(uploaded_file)
+    if uploaded is not None:
+        df = load_csv(uploaded)
 
-        search_term = st.text_input("Search:")
+        search = st.text_input("Search:")
 
-        if search_term:
-            df = df[df.apply(lambda row: row.astype(str).str.contains(search_term, case=False).any(), axis=1)]
+        if search:
+            df = df[df.apply(lambda row: row.astype(str).str.contains(search, case=False).any(), axis=1)]
 
         sort_col = st.selectbox("Sort by column:", df.columns)
         df = df.sort_values(by=sort_col)
 
-        rows_per_page = 10
-        total_pages = max((len(df) - 1) // rows_per_page + 1, 1)
+        rows = 10
+        TotalPages = max((len(df) - 1) // rows + 1, 1)
 
-        if total_pages > 1:
-            page = st.slider("Select page", 1, total_pages, 1)
+        if TotalPages > 1:
+            page = st.slider("Select page", 1, TotalPages, 1)
         else:
             page = 1
 
-        start = (page - 1) * rows_per_page
-        end = start + rows_per_page
+        start = (page - 1) * rows
+        end = start + rows
 
-        st.caption(f"Showing page {page} of {total_pages} — Total rows: {len(df)}")
+        st.caption(f"Showing page {page} of {TotalPages} — Total rows: {len(df)}")
 
         st.dataframe(df.iloc[start:end], use_container_width=True)
     else:
@@ -62,10 +62,10 @@ elif page == "User Info Form":
         if submitted:
             if agree:
                 st.success("Information Formed Successfully!")
-                st.write(f"**Enter Your Name:** {name}")
-                st.write(f"**Enter Your Age:** {age}")
-                st.write(f"**Gender:** {gender}")
-                st.write(f"**Your feedback:** {comment}")
+                st.write(f"Enter Your Name: {name}")
+                st.write(f"Enter Your Age: {age}")
+                st.write(f"Gender: {gender}")
+                st.write(f"Your feedback: {comment}")
             else:
                 st.warning("You must accept the terms and condition to submit.")
 
@@ -74,13 +74,13 @@ elif page == "Image Gallery":
 
     st.title("Image Gallery")
 
-    uploaded_images = st.file_uploader("Select Your Photos. ", type=["jpg", "jpeg", "png", "gif"], accept_multiple_files=True)
+    UploadedImages = st.file_uploader("Select Your Photos. ", type=["jpg", "jpeg", "png", "gif"], accept_multiple_files=True)
 
-    if uploaded_images:
+    if UploadedImages:
         st.subheader("Gallery")
         cols = st.columns(3)
 
-        for i, img_file in enumerate(uploaded_images):
+        for i, img_file in enumerate(UploadedImages):
             image = Image.open(img_file)
             with cols[i % 3]:
                 st.image(image, caption=img_file.name, use_container_width=True)
