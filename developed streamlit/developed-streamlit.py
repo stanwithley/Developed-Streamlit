@@ -11,6 +11,10 @@ page = st.sidebar.radio("Select One:",["Csv Uploader", "User Info Form", "Image 
 if page == "Csv Uploader":
     st.title("Csv Uploader")
 
+    @st.cache_data
+    def load_csv(file):
+        return pd.read_csv(file)
+
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 
     if uploaded_file is not None:
